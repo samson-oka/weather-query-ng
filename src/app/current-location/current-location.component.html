@@ -1,9 +1,25 @@
 <section class="page">
     <h2 class="text-3xl font-bold">Search by Current Location</h2>
-    @if(locationError) {
-        <p class="text-red-500">{{ locationError }}</p>
+    @if(locationError || weatherError) {
+        <p class="text-red-500">{{ locationError || weatherError }}</p>
     } @else if(latitude && longitude) {
-        <p>Latitude: {{ latitude }}</p>
-        <p>Longitude: {{ longitude }}</p>
+        <p>Latitude: {{ latitude }}, Longitude: {{ longitude }}</p>
+        <p>Your current location is {{ weatherData.location.name }}{{ weatherData.location.region ? ', ' + weatherData.location.region : '' }}{{ weatherData.location.country ? ', ' + weatherData.location.country : '' }}</p>
+        
+        <!-- @if(weatherData) { -->
+            <div class="mt-4">
+                @defer (on viewport) {
+                    <app-map
+                        [location]="{ lat: latitude, lon: longitude }"
+                    [placeName]="weatherData.location.name"
+                        [weatherData]="weatherData">
+                    </app-map>
+                }@placeholder {
+                    <div>Map cannot be loaded</div>
+                }@loading (minimum 100ms) {
+                    <div>Loading map...</div>
+                }
+            </div>
+        <!-- } -->
     }
 </section>
