@@ -1,0 +1,51 @@
+<section class="page">
+    <h2 class="text-3xl font-bold">Search by Location</h2>
+    
+    <div class="mt-4 search-container max-w-[600px] mx-auto">
+        <div class="flex gap-2">
+            <input 
+                type="text" 
+                [(ngModel)]="searchQuery" 
+                placeholder="Enter city, country, or address"
+                class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[200px]"
+                (keyup.enter)="searchLocation()"
+            />
+            <button 
+                (click)="searchLocation()"
+                [disabled]="isLoading"
+                class="px-4 py-2 text-white transition-colors bg-blue-500 rounded-lg cursor-pointer hover:bg-blue-600 disabled:bg-blue-300"
+            >
+                @if(isLoading) {
+                    <span>Searching...</span>
+                } @else {
+                    <span>Search</span>
+                }
+            </button>
+        </div>
+        
+        @if(error) {
+            <p class="mt-2 text-red-500">{{ error }}</p>
+        }
+    </div>
+
+    @if(location && weatherData) {
+        <div class="mt-4">
+            <p class="text-lg">Location: {{ placeName }}</p>
+            <p class="text-sm text-gray-600">Coordinates: {{ location.lat }}, {{ location.lon }}</p>
+            
+            <div class="mt-4">
+                @defer (on viewport) {
+                    <app-map
+                        [location]="location"
+                        [placeName]="placeName"
+                        [weatherData]="weatherData">
+                    </app-map>
+                }@placeholder {
+                    <div>Map cannot be loaded</div>
+                }@loading (minimum 100ms) {
+                    <div>Loading map...</div>
+                }
+            </div>
+        </div>
+    }
+</section> 
