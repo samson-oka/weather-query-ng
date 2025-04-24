@@ -1,0 +1,9 @@
+<section class="page">
+    <h2 class="text-3xl font-bold">Search by Current Location</h2>
+    @if(locationError) {
+        <p class="text-red-500">{{ locationError }}</p>
+    } @else if(latitude && longitude) {
+        <p>Latitude: {{ latitude }}</p>
+        <p>Longitude: {{ longitude }}</p>
+    }
+</section>
